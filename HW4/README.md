@@ -1,0 +1,68 @@
+Results of Part A:
+Printing part 1.a
+Minimum square error with exact formula is: 4.30881383006624
+
+===========================================
+
+Printing part 1.b
+Minimum square error for stepsize 0.00125 after 20 iterations is: 119627.706089101
+Minimum square error for stepsize 0.001 after 20 iterations is: 4.30924096023291
+Minimum square error for stepsize 0.0001 after 20 iterations is: 761.959448049456
+Minimum square error for stepsize 0.001001 after 20 iterations is: 4.30928588362178
+Minimum square error for stepsize 0.00101 after 20 iterations is: 4.30996217336506
+Minimum square error for stepsize 0.00095 after 20 iterations is: 4.30881586326679
+
+===========================================
+
+Printing part 1.c
+Minimum square error for stepsize 0.001 after 1000 iterations is: 60276.7755022167
+Minimum square error for stepsize 0.01 after 1000 iterations is: 407993.385654997
+Minimum square error for stepsize 0.02 after 1000 iterations is: 1595742.34452466
+
+===========================================
+
+Printing part 1.d
+Minimum square error in train data (train data size 100) for stepsize 0.0095 after 20 iterations is: 4.09176455532465E+19
+Minimum square error in test data  (train data size 100) for stepsize 0.0095 after 20 iterations is: 1.34262357342651E+20
+Minimum square error in train data (train data size 20) for stepsize 0.0095 after 20 iterations is: 0.00364620988353999
+Minimum square error in test data  (train data size 20) for stepsize 0.0095 after 20 iterations is: 34431.4576908889
+
+===========================================
+
+Printing part 1.e
+Minimum L2 (lambda: 0.1) square error in train data (train data size 100) for stepsize 0.0095 after 20 iterations is: 6.09050132904639E+20
+Minimum L2 (lambda: 0.1) square error in test data  (train data size 100) for stepsize 0.0095 after 20 iterations is: 2.10111509886975E+21
+Minimum L2 (lambda: 10) square error in train data (train data size 100) for stepsize 0.0095 after 20 iterations is: 3.17500591010441E+55
+Minimum L2 (lambda: 0.01) square error in train data (train data size 100) for stepsize 0.0095 after 20 iterations is: 5.40661878160229E+19
+Minimum L2 (lambda: 0.01) square error in test data  (train data size 100) for stepsize 0.0095 after 20 iterations is: 1.78339133413855E+20
+Minimum L2 (lambda: 10) square error in test data  (train data size 100) for stepsize 0.0095 after 20 iterations is: 2.66128991371261E+56
+Minimum L2 (lambda: 0.1) square error in train data (train data size 20) for stepsize 0.0095 after 20 iterations is: 10.3151124650503
+Minimum L2 (lambda: 0.1) square error in test data  (train data size 20) for stepsize 0.0095 after 20 iterations is: 34942.4185870495
+Minimum L2 (lambda: 0.01) square error in train data (train data size 20) for stepsize 0.0095 after 20 iterations is: 1.03182558874817
+Minimum L2 (lambda: 0.01) square error in test data  (train data size 20) for stepsize 0.0095 after 20 iterations is: 34485.3020980624
+Minimum L2 (lambda: 0.001) square error in train data (train data size 100) for stepsize 0.0095 after 20 iterations is: 4.20776353698348E+19
+Minimum L2 (lambda: 0.001) square error in test data  (train data size 100) for stepsize 0.0095 after 20 iterations is: 1.38141370818986E+20
+Minimum L2 (lambda: 10) square error in train data (train data size 20) for stepsize 0.0095 after 20 iterations is: 1.4261906687745E+28
+Minimum L2 (lambda: 10) square error in test data  (train data size 20) for stepsize 0.0095 after 20 iterations is: 4.10528041631872E+29
+Minimum L2 (lambda: 1) square error in train data (train data size 100) for stepsize 0.0095 after 20 iterations is: 5.76246095020548E+28
+Minimum L2 (lambda: 1) square error in test data  (train data size 100) for stepsize 0.0095 after 20 iterations is: 2.68058099661177E+29
+Minimum L2 (lambda: 100) square error in train data (train data size 100) for stepsize 0.0095 after 20 iterations is: 1.00277910821279E+93
+Minimum L2 (lambda: 0.1) square error in train data (train data size 50) for stepsize 0.0095 after 20 iterations is: 155382378815.637
+Minimum L2 (lambda: 100) square error in test data  (train data size 100) for stepsize 0.0095 after 20 iterations is: 9.85725442894085E+93
+Minimum L2 (lambda: 0.1) square error in test data  (train data size 50) for stepsize 0.0095 after 20 iterations is: 568717948042.098
+Minimum L2 (lambda: 0.01) square error in train data (train data size 50) for stepsize 0.0095 after 20 iterations is: 24929237772.6614
+Minimum L2 (lambda: 0.01) square error in test data  (train data size 50) for stepsize 0.0095 after 20 iterations is: 84939772188.7918
+Minimum L2 (lambda: 10) square error in train data (train data size 50) for stepsize 0.0095 after 20 iterations is: 5.33116481562619E+42
+Minimum L2 (lambda: 10) square error in test data  (train data size 50) for stepsize 0.0095 after 20 iterations is: 8.02807593240029E+43
+Minimum L2 (lambda: 1) square error in train data (train data size 20) for stepsize 0.0095 after 20 iterations is: 35048.3882390373
+Minimum L2 (lambda: 1) square error in test data  (train data size 20) for stepsize 0.0095 after 20 iterations is: 367129.681587731
+Minimum L2 (lambda: 0.001) square error in train data (train data size 20) for stepsize 0.0095 after 20 iterations is: 0.106438096082169
+Minimum L2 (lambda: 0.001) square error in test data  (train data size 20) for stepsize 0.0095 after 20 iterations is: 34436.8709816637
+Minimum L2 (lambda: 100) square error in train data (train data size 20) for stepsize 0.0095 after 20 iterations is: 3.00565753980271E+64
+Minimum L2 (lambda: 100) square error in test data  (train data size 20) for stepsize 0.0095 after 20 iterations is: 1.39883972664112E+66
+Minimum L2 (lambda: 1) square error in train data (train data size 50) for stepsize 0.0095 after 20 iterations is: 4.03653152158312E+17
+Minimum L2 (lambda: 1) square error in test data  (train data size 50) for stepsize 0.0095 after 20 iterations is: 2.37539661440619E+18
+Minimum L2 (lambda: 0.001) square error in train data (train data size 50) for stepsize 0.0095 after 20 iterations is: 20661418441.7145
+Minimum L2 (lambda: 0.001) square error in test data  (train data size 50) for stepsize 0.0095 after 20 iterations is: 69867859408.9919
+Minimum L2 (lambda: 100) square error in train data (train data size 50) for stepsize 0.0095 after 20 iterations is: 1.94377241802244E+80
+Minimum L2 (lambda: 100) square error in test data  (train data size 50) for stepsize 0.0095 after 20 iterations is: 3.79937359087037E+81
