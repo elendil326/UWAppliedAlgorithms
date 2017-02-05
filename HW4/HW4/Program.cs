@@ -31,15 +31,32 @@ namespace HW4
             // Part 1.b)
             Console.WriteLine("Printing part 1.b");
             double[] stepSizes = new[] { 0.0001, 0.001, 0.00125, 0.001001, 0.00101, 0.00095 };
+            int iterations = 20;
             Parallel.For(0, stepSizes.Length, i =>
             {
                 double stepSize = stepSizes[i];
-                double[,] gdA = new GDLeastSquareError(stepSize, 20).GetOptimalA(X, y);
+                double[,] gdA = new GDLeastSquareError(stepSize, iterations).GetOptimalA(X, y);
                 //Task.Run(() => Console.WriteLine($"Using A {JsonConvert.SerializeObject(gdA)} from {stepSize} step GD"));
                 double gdAError = SquareError.GetSquareError(X, y, gdA);
-                Console.WriteLine($"Minimum square error for stepsize {stepSize} is: {gdAError}");
+                Console.WriteLine($"Minimum square error for stepsize {stepSize} after {iterations} iterations is: {gdAError}");
             });
 
+            Console.WriteLine();
+            Console.WriteLine("===========================================");
+            Console.WriteLine();
+
+            // Part 1.c)
+            Console.WriteLine("Printing part 1.c");
+            stepSizes = new[] { 0.001, 0.01, 0.02 };
+            iterations = 1000;
+            Parallel.For(0, stepSizes.Length, i =>
+            {
+                double stepSize = stepSizes[i];
+                double[,] gdA = new SGDLeastSquareError(stepSize, iterations).GetOptimalA(X, y);
+                //Task.Run(() => Console.WriteLine($"Using A {JsonConvert.SerializeObject(gdA)} from {stepSize} step GD"));
+                double gdAError = SquareError.GetSquareError(X, y, gdA);
+                Console.WriteLine($"Minimum square error for stepsize {stepSize} after {iterations} iterations is: {gdAError}");
+            });
 
             // End
             Console.ReadKey();

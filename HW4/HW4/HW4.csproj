@@ -54,6 +54,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomHelper.cs" />
+    <Compile Include="SGDLeastSquareError.cs" />
     <Compile Include="SquareError.cs" />
   </ItemGroup>
   <ItemGroup>
