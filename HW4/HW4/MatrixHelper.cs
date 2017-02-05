@@ -41,9 +41,9 @@ namespace HW4
             int p = A.GetLength(1);
             double[,] result = new double[n, m];
 
-            Parallel.For(0, n, i =>
+            for (int i = 0; i < n; i++)
             {
-                Parallel.For(0, m, j =>
+                for (int j = 0; j < m; j++)
                 {
                     double accumulator = 0;
 
@@ -53,9 +53,8 @@ namespace HW4
                     };
 
                     result[i, j] = accumulator;
-                });
-                
-            });
+                };
+            };
 
             return result;
         }
@@ -64,13 +63,13 @@ namespace HW4
         {
             double[,] result = new double[A.GetLength(0), A.GetLength(1)];
 
-            Parallel.For(0, A.GetLength(0), i =>
+            for (int i = 0; i < A.GetLength(0); i++)
             {
-                Parallel.For(0, A.GetLength(1), j =>
+                for (int j = 0; j < A.GetLength(1); j++)
                 {
                     result[i, j] = A[i, j] * x;
-                });
-            });
+                };
+            };
 
             return result;
         }
@@ -79,13 +78,13 @@ namespace HW4
         {
             double[,] result = new double[A.GetLength(1), A.GetLength(0)];
 
-            Parallel.For(0, A.GetLength(0), i =>
+            for (int i = 0; i < A.GetLength(0); i++)
             {
-                Parallel.For(0, A.GetLength(1), j =>
+                for (int j = 0; j < A.GetLength(1); j++)
                 {
                     result[j, i] = A[i, j];
-                });
-            });
+                };
+            };
 
             return result;
         }
@@ -260,8 +259,8 @@ namespace HW4
         public double[][] MatrixCreate(int rows, int cols)
         {
             double[][] result = new double[rows][];
-            Parallel.For(0, rows, i =>
-                result[i] = new double[cols]);
+            for (int i = 0; i < rows; i++)
+                result[i] = new double[cols];
             return result;
         }
 
@@ -274,13 +273,13 @@ namespace HW4
 
             double[,] result = new double[A.GetLength(0), A.GetLength(1)];
 
-            Parallel.For(0, A.GetLength(0), i =>
+            for (int i = 0; i < A.GetLength(0); i++)
             {
-                Parallel.For(0, B.GetLength(1), j =>
+                for (int j = 0; j < A.GetLength(1); j++)
                 {
                     result[i, j] = A[i, j] + B[i, j];
-                });
-            });
+                };
+            };
 
             return result;
         }

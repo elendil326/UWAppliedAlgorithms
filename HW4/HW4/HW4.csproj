@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClosedLeastSquareError.cs" />
+    <Compile Include="GDLeastSquareError.cs" />
     <Compile Include="ILeastSquareError.cs" />
     <Compile Include="MatrixHelper.cs" />
     <Compile Include="Program.cs" />
