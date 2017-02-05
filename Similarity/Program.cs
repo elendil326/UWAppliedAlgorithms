@@ -137,6 +137,7 @@ $(function () {
         static string _data50Csv = @".\Data\data50.csv";
         static string _labelCsv = @".\Data\label.csv";
         static string _groupsCsv = @".\Data\groups.csv";
+        static Random _rand = new Random();
         #endregion Members
 
         #region Main
@@ -385,9 +386,8 @@ $(function () {
         {
             int mean = 0;
             int stdDev = 1;
-            Random rand = new Random(); //reuse this if you are generating many
-            double u1 = rand.NextDouble(); //these are uniform(0,1) random doubles
-            double u2 = rand.NextDouble();
+            double u1 = _rand.NextDouble(); //these are uniform(0,1) random doubles
+            double u2 = _rand.NextDouble();
             double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
                          Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
             double randNormal =
@@ -398,8 +398,7 @@ $(function () {
 
         private static double RandomSignedNumber()
         {
-            Random rand = new Random();
-            double d = rand.NextDouble(); //these are uniform(0,1) random doubles
+            double d = _rand.NextDouble(); //these are uniform(0,1) random doubles
             return d > 0.5 ? 1 : -1;
         }
 
