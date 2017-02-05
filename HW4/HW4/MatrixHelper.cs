@@ -18,13 +18,13 @@ namespace HW4
             RandomHelper random = new RandomHelper();
             double[,] randomMatrix = new double[m, n];
 
-            Parallel.For(0, m, i =>
+            for (int i = 0; i < m; i++)
             {
-                Parallel.For(0, n, j =>
+                for (int j = 0; j < n; j++)
                 {
                     randomMatrix[i, j] = random.GetGaussianRandom(mean, standardDeviation);
-                });
-            });
+                };
+            };
 
             return randomMatrix;
         }

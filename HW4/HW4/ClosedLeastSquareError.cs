@@ -11,7 +11,11 @@ namespace HW4
         public double[,] GetOptimalA(double[,] X, double[,] y)
         {
             MatrixHelper matrixHelper = new MatrixHelper();
-            double[,] result = new double[1,1];
+            double[,] Xt = matrixHelper.Transpose(X);
+            double[,] result = matrixHelper.DotProduct(Xt, X);
+            result = matrixHelper.MatrixInverse(result);
+            result = matrixHelper.DotProduct(result, Xt);
+            result = matrixHelper.DotProduct(result, y);
 
             return result;
         }

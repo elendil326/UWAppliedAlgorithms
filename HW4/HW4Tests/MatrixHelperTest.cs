@@ -21,6 +21,8 @@ namespace HW4Tests
             {
                 for (int j = 0; j < random.GetLength(1); j++)
                 {
+                    Assert.IsFalse(double.IsNaN(random[i, j]));
+
                     if (random[i,j] != 0)
                     {
                         allZeros = false;
