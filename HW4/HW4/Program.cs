@@ -85,14 +85,62 @@ namespace HW4
             Console.WriteLine($"Minimum square error in test data  (train data size {train_m}) for stepsize {step} after {iterations} iterations is: {gdAErrorResult}");
 
             train_m = 20;
-            gdAVector = new GDLeastSquareError(step, iterations).GetOptimalA(X_train, y_train);
+            double[,] X_train_20 = matrixHelper.GenerateRandomMatrix(train_m, n, 0, 1);
+            double[,] y_train_20 = matrixHelper.MatrixAddition(matrixHelper.DotProduct(X_train_20, a_true), matrixHelper.DotProduct(matrixHelper.GenerateRandomMatrix(train_m, 1, 0, 1), 0.5));
+
+            gdAVector = new GDLeastSquareError(step, iterations).GetOptimalA(X_train_20, y_train_20);
             //Task.Run(() => Console.WriteLine($"Using A {JsonConvert.SerializeObject(gdA)} from {stepSize} step GD"));
-            gdAErrorResult = SquareError.GetSquareError(X_train, y_train, gdAVector);
+            gdAErrorResult = SquareError.GetSquareError(X_train_20, y_train_20, gdAVector);
             Console.WriteLine($"Minimum square error in train data (train data size {train_m}) for stepsize {step} after {iterations} iterations is: {gdAErrorResult}");
 
             //Task.Run(() => Console.WriteLine($"Using A {JsonConvert.SerializeObject(gdA)} from {stepSize} step GD"));
             gdAErrorResult = SquareError.GetSquareError(X_test, y_test, gdAVector);
             Console.WriteLine($"Minimum square error in test data  (train data size {train_m}) for stepsize {step} after {iterations} iterations is: {gdAErrorResult}");
+
+            Console.WriteLine();
+            Console.WriteLine("===========================================");
+            Console.WriteLine();
+
+            // Part 1.e)
+            Console.WriteLine("Printing part 1.e");
+            double[] lambdas = new[] { 100, 10, 1, 0.1, 0.01, 0.001 };
+            train_m = 50;
+            double[,] X_train_50 = matrixHelper.GenerateRandomMatrix(train_m, n, 0, 1);
+            double[,] y_train_50 = matrixHelper.MatrixAddition(matrixHelper.DotProduct(X_train_50, a_true), matrixHelper.DotProduct(matrixHelper.GenerateRandomMatrix(train_m, 1, 0, 1), 0.5));
+            Parallel.For(0, lambdas.Length, i =>
+            {
+                double lambda = lambdas[i];
+                int trainSize = 100;
+                double[,] gdA = new GDL2LeastSquareError(step, iterations, lambda).GetOptimalA(X_train, y_train);
+                //Task.Run(() => Console.WriteLine($"Using A {JsonConvert.SerializeObject(gdA)} from {stepSize} step GD"));
+                double gdAError = SquareError.GetSquareErrorL2(X_train, y_train, gdA, lambda);
+                Console.WriteLine($"Minimum L2 (lambda: {lambda}) square error in train data (train data size {trainSize}) for stepsize {step} after {iterations} iterations is: {gdAError}");
+
+                //Task.Run(() => Console.WriteLine($"Using A {JsonConvert.SerializeObject(gdA)} from {stepSize} step GD"));
+                gdAError = SquareError.GetSquareErrorL2(X_test, y_test, gdA, lambda);
+                Console.WriteLine($"Minimum L2 (lambda: {lambda}) square error in test data  (train data size {trainSize}) for stepsize {step} after {iterations} iterations is: {gdAError}");
+
+                trainSize = 20;
+                gdA = new GDL2LeastSquareError(step, iterations, lambda).GetOptimalA(X_train_20, y_train_20);
+                //Task.Run(() => Console.WriteLine($"Using A {JsonConvert.SerializeObject(gdA)} from {stepSize} step GD"));
+                gdAError = SquareError.GetSquareErrorL2(X_train_20, y_train_20, gdA, lambda);
+                Console.WriteLine($"Minimum L2 (lambda: {lambda}) square error in train data (train data size {trainSize}) for stepsize {step} after {iterations} iterations is: {gdAError}");
+
+                //Task.Run(() => Console.WriteLine($"Using A {JsonConvert.SerializeObject(gdA)} from {stepSize} step GD"));
+                gdAError = SquareError.GetSquareErrorL2(X_test, y_test, gdA, lambda);
+                Console.WriteLine($"Minimum L2 (lambda: {lambda}) square error in test data  (train data size {trainSize}) for stepsize {step} after {iterations} iterations is: {gdAError}");
+
+                trainSize = 50;
+                gdA = new GDL2LeastSquareError(step, iterations, lambda).GetOptimalA(X_train_50, y_train_50);
+                //Task.Run(() => Console.WriteLine($"Using A {JsonConvert.SerializeObject(gdA)} from {stepSize} step GD"));
+                gdAError = SquareError.GetSquareErrorL2(X_train_50, y_train_50, gdA, lambda);
+                Console.WriteLine($"Minimum L2 (lambda: {lambda}) square error in train data (train data size {trainSize}) for stepsize {step} after {iterations} iterations is: {gdAError}");
+
+                //Task.Run(() => Console.WriteLine($"Using A {JsonConvert.SerializeObject(gdA)} from {stepSize} step GD"));
+                gdAError = SquareError.GetSquareErrorL2(X_test, y_test, gdA, lambda);
+                Console.WriteLine($"Minimum L2 (lambda: {lambda}) square error in test data  (train data size {trainSize}) for stepsize {step} after {iterations} iterations is: {gdAError}");
+
+            });
 
             // End
             Console.ReadKey();
