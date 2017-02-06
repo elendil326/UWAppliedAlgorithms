@@ -17,6 +17,17 @@ import random
 
 data = []
 
+fig = plt.figure()
+fig.set_dpi(100)
+fig.set_size_inches(12, 3)
+
+ax = plt.axes(xlim=(-1, 10), ylim=(0, 3))
+
+joints = [5, 0, 1, 2, 1, 0, 3, 4]
+patch = plt.Polygon([[0,0],[0,0]],closed=None, fill=None, edgecolor='k')
+head = plt.Circle((0, 0), radius=0.15, fc='k', ec='k')
+
+
 # plan is an array of 40 floating point numbers
 def sim(plan):
     for i in range(0, len(plan)):
@@ -179,27 +190,16 @@ def sim(plan):
                 return p[0][5]
     return p[0][5]
 
-
-###########
-# The following code is given as an example to store a video of the run and to display
-# the run in a graphics window. You will treat sim(plan) as a black box objective
-# function and minimize it.
-###########
-
-plan = [random.uniform(-1,1) for i in range(40)]
-
-sim(plan)
-
 # draw the simulation
-fig = plt.figure()
-fig.set_dpi(100)
-fig.set_size_inches(12, 3)
+def drawAndSave(name):
 
-ax = plt.axes(xlim=(-1, 10), ylim=(0, 3))
+    
 
-joints = [5, 0, 1, 2, 1, 0, 3, 4]
-patch = plt.Polygon([[0,0],[0,0]],closed=None, fill=None, edgecolor='k')
-head = plt.Circle((0, 0), radius=0.15, fc='k', ec='k')
+    anim = animation.FuncAnimation(fig, animate,
+                               init_func=init,
+                               frames=len(data),
+                               interval=20)
+    anim.save(name, fps=50)
 
 def init():
     ax.add_patch(patch)
@@ -213,10 +213,111 @@ def animate(j):
     head.center = (data[j][0][5], data[j][1][5])
     return patch,head
 
-anim = animation.FuncAnimation(fig, animate,
-                               init_func=init,
-                               frames=len(data),
-                               interval=20)
-anim.save('animation.mp4', fps=50)
+def optimizeRandomlyDefault(pln, cycles):
+    randomPlan = [random.uniform(-1,1) for i in range(40)]
+    return optimizeRandomly(pln, randomPlan, cycles)
+
+def optimizeRandomly(pln, plnOptimzer, cycles):
+    if  cycles <= 0:
+        return pln
+
+    plnOptimzer = [random.uniform(-1,1) for i in range(40)]
+    for i in range(40):
+        if random.uniform(-1, 1) < 0:
+            pln[i] -= alpha * abs(plnOptimzer[i] - pln[i])
+        else:
+            pln[i] += alpha * abs(plnOptimzer[i] - pln[i])
+    
+    return optimizeRandomly(pln, plnOptimzer, cycles - 1)
+
+def optimizeGenetically(pln, generations, nMutants):
+    if generations == 0:
+        return pln
+
+    mutants = [[random.uniform(-1,1) for i in range(40)] for i in range(nMutants)]
+
+    # Mutate
+    min_i = -1
+    min_Value = float("inf")
+    for i in range(nMutants):
+        mutants[i] = optimizeRandomly(pln, mutants[i], 1)
+        value = sim(mutants[i])
+        if value < min_Value:
+            min_Value = value
+            min_i = i
+
+    # Pick min mutant
+    return optimizeGenetically(mutants[min_i], generations - 1, nMutants)
+
+def optimizeStochastic(pln, iterations):
+    if iterations == 0:
+        return pln
+    
+    randomI = random.normal()
+
+
+###########
+# The following code is given as an example to store a video of the run and to display
+# the run in a graphics window. You will treat sim(plan) as a black box objective
+# function and minimize it.
+###########
+
+plan = [random.uniform(-1,1) for i in range(40)]
+
+sim(plan)
+drawAndSave('animation.mp4')
+data = []
+
+alpha = 0.5
+
+sim(optimizeRandomlyDefault(plan, 20))
+drawAndSave('animationRandomOptimization20Cycles.mp4')
+data = []
+
+sim(optimizeRandomlyDefault(plan, 100))
+drawAndSave('animationRandomOptimization100Cycles.mp4')
+data = []
+
+generationalPlan = optimizeGenetically(plan, 5, 100)
+data = []
+sim(generationalPlan)
+drawAndSave('animationMutation5Generations100Mutants.mp4')
+data = []
+
+generationalPlan = optimizeGenetically(plan, 5, 200)
+data = []
+sim(generationalPlan)
+drawAndSave('animationMutation5Generations200Mutants.mp4')
+data = []
+
+generationalPlan = optimizeGenetically(plan, 10, 200)
+data = []
+sim(generationalPlan)
+drawAndSave('animationMutation10Generations200Mutants.mp4')
+data = []
+
+generationalPlan = optimizeGenetically(plan, 25, 200)
+data = []
+sim(generationalPlan)
+drawAndSave('animationMutation25Generations200Mutants.mp4')
+data = []
+
+generationalPlan = optimizeGenetically(plan, 50, 200)
+data = []
+sim(generationalPlan)
+drawAndSave('animationMutation50Generations200Mutants.mp4')
+data = []
+
+generationalPlan = optimizeGenetically(plan, 100, 200)
+data = []
+sim(generationalPlan)
+drawAndSave('animationMutation100Generations200Mutants.mp4')
+data = []
+
+generationalPlan = optimizeGenetically(plan, 100, 2000)
+data = []
+sim(generationalPlan)
+drawAndSave('animationMutation100Generations2000Mutants.mp4')
+data = []
 
 plt.show()
