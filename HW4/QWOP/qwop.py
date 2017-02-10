@@ -14,9 +14,7 @@ from matplotlib import animation
 import copy
 import random
 
-
-data = []
-
+step_alpha = 0.095
 fig = plt.figure()
 fig.set_dpi(100)
 fig.set_size_inches(12, 3)
@@ -29,7 +27,7 @@ head = plt.Circle((0, 0), radius=0.15, fc='k', ec='k')
 
 
 # plan is an array of 40 floating point numbers
-def sim(plan):
+def sim(plan, data):
     for i in range(0, len(plan)):
         if plan[i] > 1:
             plan[i] = 1.0
@@ -182,8 +180,9 @@ def sim(plan):
                         v[0][z] -= fric*friction*s
                 p[0][z] += v[0][z] * dt
                 p[1][z] += v[1][z] * dt;
-
-            data.append(copy.deepcopy(p))
+            
+            if data != None:
+                data.append(copy.deepcopy(p))
 
 
             if contact[0] or contact[5]:
@@ -221,40 +220,107 @@ def optimizeRandomly(pln, plnOptimzer, cycles):
     if  cycles <= 0:
         return pln
 
-    plnOptimzer = [random.uniform(-1,1) for i in range(40)]
     for i in range(40):
-        if random.uniform(-1, 1) < 0:
-            pln[i] -= alpha * abs(plnOptimzer[i] - pln[i])
-        else:
-            pln[i] += alpha * abs(plnOptimzer[i] - pln[i])
+        pln[i] += (random.uniform(0, 1)) * (abs(pln[i]) - abs(plnOptimzer[i]))
     
     return optimizeRandomly(pln, plnOptimzer, cycles - 1)
 
 def optimizeGenetically(pln, generations, nMutants):
-    if generations == 0:
-        return pln
+    mutants = []
+    for j in range(generations):
+        mutants = [[random.uniform(-1,1) for i in range(40)] for i in range(nMutants)]
+        
+        # Mutate
+        max_plan = pln
+        max_Value = sim(pln, None)
+        print('Mutating current max value: ' + `max_Value`)
+        for i in range(nMutants):
+            mutatedPlan = copy.deepcopy(pln)
+            mutants[i] = optimizeRandomly(mutatedPlan, mutants[i], 1)
+            value = sim(mutants[i], None)
+            if value >= max_Value:
+                print("Max plan mutated to " + `max_Value`)
+                max_Value = value
+                max_plan = copy.deepcopy(mutants[i])
+        
+        pln = max_plan
 
-    mutants = [[random.uniform(-1,1) for i in range(40)] for i in range(nMutants)]
-
-    # Mutate
-    min_i = -1
-    min_Value = float("inf")
-    for i in range(nMutants):
-        mutants[i] = optimizeRandomly(pln, mutants[i], 1)
-        value = sim(mutants[i])
-        if value < min_Value:
-            min_Value = value
-            min_i = i
-
-    # Pick min mutant
-    return optimizeGenetically(mutants[min_i], generations - 1, nMutants)
+    # Pick max mutant
+    return pln
 
 def optimizeStochastic(pln, iterations):
-    if iterations == 0:
-        return pln
-    
-    randomI = random.normal()
+    max_value = float("-inf")
+    max_plan = []
+    local_alpha = step_alpha
+    oldValue = float("-inf")
+    for i in range(iterations):
+        value = sim(pln, None)
+        print("Iteration " + `i` + " with distance " + `value`)
+        if value >= 9.7:
+            return pln
+        if max_value < value:
+            max_value = value
+            max_plan = copy.deepcopy(pln)
+        
+        if i != 0 and i % 15 == 0:
+            local_alpha = 0.75 * random.uniform(-1, 1)
+        else:
+            local_alpha = step_alpha
 
+        if i != 0 and i % 200 == 0:
+            print("Resetting to max plan with value " + `max_value`)
+            pln = optimizeGenetically(max_plan, 3, 10000)
+            max_value = sim(pln, None)
+            max_plan = copy.deepcopy(pln)
+            print("New max " + `max_value`)
+        
+        oldValue = value
+        randomI = random.randint(0, 39)
+        oldDimensionValue = pln[randomI]
+        newDimensionValue = random.uniform(-0.00001, 0.00001)
+        pln[randomI] += newDimensionValue
+        newValue = sim(pln, None)
+        diff = (newValue - value) / (newDimensionValue - oldDimensionValue)
+        pln[randomI] = oldDimensionValue + local_alpha * diff
+
+    return max_plan
+
+def optimizeGradient(pln, iterations):
+    max_value = float("-inf")
+    max_plan = []
+    local_alpha = step_alpha
+    oldValue = float("-inf")
+    for i in range(iterations):
+        value = sim(pln, None)
+        print("Iteration " + `i` + " with distance " + `value`)
+        if value >= 19:
+            return pln
+        if max_value < value:
+            max_value = value
+            max_plan = copy.deepcopy(pln)
+        
+        if i != 0 and i % 5 == 0:
+            local_alpha += 7 * random.uniform(-1, 1)
+        else:
+            local_alpha = step_alpha
+
+        if i != 0 and i % 20 == 0:
+            print("Resetting to max plan with value " + `max_value`)
+            pln = optimizeGenetically(max_plan, 3, 400)
+            max_value = sim(pln, None)
+            max_plan = copy.deepcopy(pln)
+            print("New max " + `max_value`)
+        
+        oldValue = value
+        for j in range(40):
+            oldDimensionValue = pln[j]
+            newDimensionValue = random.uniform(-0.00001, 0.00001)
+            pln[j] += newDimensionValue
+            newValue = sim(pln, None)
+            diff = (newValue - value) / newDimensionValue
+            pln[j] = oldDimensionValue + local_alpha * diff
+
+    return max_plan
 
 ###########
 # The following code is given as an example to store a video of the run and to display
@@ -262,62 +328,33 @@ def optimizeStochastic(pln, iterations):
 # function and minimize it.
 ###########
 
+originalPlan = [random.uniform(-1,1) for i in range(40)]
+plan = copy.deepcopy(originalPlan)
+data = []
+
+# sim(plan, data)
+# drawAndSave('animation.mp4')
+# data = []
+# plan = copy.deepcopy(originalPlan)
+
+# generationalPlan = optimizeGenetically(plan, 1000, 200)
+# data = []
+# sim(generationalPlan, data)
+# drawAndSave('animationMutation1000Generations200Mutants.mp4')
+# data = []
+# plan = copy.deepcopy(originalPlan)
+
+generationalPlan = optimizeStochastic(plan, 55000)
+data = []
+distance = sim(generationalPlan, data) 
+print("distance is :" + `distance`)
+drawAndSave('animationStochastic55000IterationsMutantAlphaRandomStepAlpha000095.mp4')
+data = []
 plan = [random.uniform(-1,1) for i in range(40)]
 
-sim(plan)
-drawAndSave('animation.mp4')
-data = []
-
-alpha = 0.5
-
-sim(optimizeRandomlyDefault(plan, 20))
-drawAndSave('animationRandomOptimization20Cycles.mp4')
-data = []
-
-sim(optimizeRandomlyDefault(plan, 100))
-drawAndSave('animationRandomOptimization100Cycles.mp4')
-data = []
-
-generationalPlan = optimizeGenetically(plan, 5, 100)
-data = []
-sim(generationalPlan)
-drawAndSave('animationMutation5Generations100Mutants.mp4')
-data = []
-
-generationalPlan = optimizeGenetically(plan, 5, 200)
-data = []
-sim(generationalPlan)
-drawAndSave('animationMutation5Generations200Mutants.mp4')
-data = []
-
-generationalPlan = optimizeGenetically(plan, 10, 200)
-data = []
-sim(generationalPlan)
-drawAndSave('animationMutation10Generations200Mutants.mp4')
-data = []
-
-generationalPlan = optimizeGenetically(plan, 25, 200)
-data = []
-sim(generationalPlan)
-drawAndSave('animationMutation25Generations200Mutants.mp4')
-data = []
-
-generationalPlan = optimizeGenetically(plan, 50, 200)
-data = []
-sim(generationalPlan)
-drawAndSave('animationMutation50Generations200Mutants.mp4')
-data = []
-
-generationalPlan = optimizeGenetically(plan, 100, 200)
-data = []
-sim(generationalPlan)
-drawAndSave('animationMutation100Generations200Mutants.mp4')
-data = []
-
-generationalPlan = optimizeGenetically(plan, 100, 2000)
-data = []
-sim(generationalPlan)
-drawAndSave('animationMutation100Generations2000Mutants.mp4')
-data = []
-
-plt.show()
+# generationalPlan = optimizeGradient(plan, 10000)
+# data = []
+# sim(generationalPlan, data)
+# drawAndSave('animationGradient10000IterationsMutantAlpha75StepAlpha000095.mp4')
+# data = []
+# plan = [random.uniform(-1,1) for i in range(40)]
