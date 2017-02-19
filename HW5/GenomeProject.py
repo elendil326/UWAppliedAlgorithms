@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import plotly.plotly as py
 from collections import Counter
 from sklearn.decomposition import PCA
+from array import array
 
 # Initialize values
 individuals = 995
@@ -39,17 +40,40 @@ for i in range(individuals):
 			X[i][j] = 0
 
 # Section (a)
-
 pca = PCA(n_components=2)
-pca.fit(X)
+reducedX = pca.fit_transform(X)
 
-N = 50
-x = np.random.rand(N)
-y = np.random.rand(N)
-colors = np.random.rand(N)
-area = np.pi * (15 * np.random.rand(N))**2  # 0 to 15 point radii
+# Initialize colors per population
+colorsPerPopulation = dict()
+colors = [0 for i in range(individuals)]
+for i in range(individuals):
+	if fullData[i][2] not in colorsPerPopulation:
+		colorsPerPopulation[fullData[i][2]] = np.random.random()
+	colors[i] = colorsPerPopulation[fullData[i][2]]
 
-plt.scatter(x, y, s=area, c=colors, alpha=0.5)
+scatterPlotsPerPopulation = [0 for i in range(len(colorsPerPopulation))]
+legendsPerPopulation = [0 for i in range(len(colorsPerPopulation))]
+j = 0
+for key, value in colorsPerPopulation.iteritems():
+	x = []
+	y = []
+	for i in range(individuals):
+		if colors[i] == value:
+			x.append(reducedX[i][0])
+			y.append(reducedX[i][1])
+	area = [np.pi * (5**2) for i in range(len(x))]
+	scatter = plt.scatter(x, y, s=area, c=[value for i in range(len(x))], alpha=0.5)
+	scatterPlotsPerPopulation[j] = scatter
+	legendsPerPopulation[j] = key
+	j = j + 1
+
+plt.legend(tuple(scatterPlotsPerPopulation),
+           tuple(legendsPerPopulation),
+           scatterpoints=1,
+           loc='lower left',
+           ncol=3,
+           fontsize=8)
+
 plt.show()
 
 
