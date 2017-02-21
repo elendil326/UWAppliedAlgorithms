@@ -66,6 +66,11 @@ reducedX=[0 for i in range(individuals)]
 for idx in xrange(X_std.shape[0]):
 	reducedX[idx]=ortho_proj_vec(ortho_proj_vec(X_std[idx,:], v1hat), v2hat)
 
+# Section (f)
+for i in range(len(pca.components_[2])):
+	# if abs(pca.components_[2][i]) > 0.1:
+	print("{} : {}".format(i, pca.components_[2][i]))
+
 # Draw scatter by population
 # populationMap = {
 # 	"ACB" : "African Caribbeans in Barbados",
@@ -102,37 +107,37 @@ for idx in xrange(X_std.shape[0]):
 #            fontsize=8)
 
 # Draw scatter by gender
-genderMap = {
-	"1" : "Male",
-	"2" : "Female"
-}
-cmap = plt.cm.get_cmap("hsv", len(genderMap) + 1)
+# genderMap = {
+# 	"1" : "Male",
+# 	"2" : "Female"
+# }
+# cmap = plt.cm.get_cmap("hsv", len(genderMap) + 1)
 
-scatterPlotsPerGender = [0 for i in range(len(genderMap))]
-legendsPerGender = [0 for i in range(len(genderMap))]
-j = 0
-for key, value in genderMap.iteritems():
-	x = []
-	y = []
-	for i in range(individuals):
-		if fullData[i][1] == key:
-			x.append(reducedX[i][0])
-			y.append(reducedX[i][1])
-	area = [np.pi * (5**2) for i in range(len(x))]
-	scatter = plt.scatter(x, y, s=area, c=[cmap(j) for i in range(len(x))], alpha=0.5)
-	scatterPlotsPerGender[j] = scatter
-	legendsPerGender[j] = genderMap[key]
-	j = j + 1
+# scatterPlotsPerGender = [0 for i in range(len(genderMap))]
+# legendsPerGender = [0 for i in range(len(genderMap))]
+# j = 0
+# for key, value in genderMap.iteritems():
+# 	x = []
+# 	y = []
+# 	for i in range(individuals):
+# 		if fullData[i][1] == key:
+# 			x.append(reducedX[i][0])
+# 			y.append(reducedX[i][1])
+# 	area = [np.pi * (5**2) for i in range(len(x))]
+# 	scatter = plt.scatter(x, y, s=area, c=[cmap(j) for i in range(len(x))], alpha=0.5)
+# 	scatterPlotsPerGender[j] = scatter
+# 	legendsPerGender[j] = genderMap[key]
+# 	j = j + 1
 
-plt.legend(tuple(scatterPlotsPerGender),
-           tuple(legendsPerGender),
-           scatterpoints=1,
-           loc='lower left',
-           ncol=3,
-           fontsize=8)
+# plt.legend(tuple(scatterPlotsPerGender),
+#            tuple(legendsPerGender),
+#            scatterpoints=1,
+#            loc='lower left',
+#            ncol=3,
+#            fontsize=8)
 
 
-plt.show()
+# plt.show()
 
 
 
